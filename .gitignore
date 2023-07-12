@@ -38,3 +38,7 @@ x64
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+
+# Clion files
+.idea
+cmake-build-debug
