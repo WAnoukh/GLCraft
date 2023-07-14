@@ -6,6 +6,8 @@
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 class Application;
 
@@ -16,26 +18,18 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(Window const&) = delete;
 
+	GLFWwindow * getGLFWwindow() { return window; };
+
     int init();
     void updateScreen() const;
-
     void terminate() const { glfwTerminate(); };
-
-    void swapBuffers() const { glfwSwapBuffers(window); }
-
-    void pollEvents() const { glfwPollEvents(); }
-
     bool shouldClose() const { return glfwWindowShouldClose(window); }
 
-    void Update();
+   
 
 private:
 	const Application& application;
-	const unsigned int WIDTH = 800;
-	const unsigned int HEIGHT = 600;
 
     GLFWwindow* window;
-
-    void processInput(GLFWwindow* window);
 };
 

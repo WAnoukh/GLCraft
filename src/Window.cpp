@@ -1,5 +1,11 @@
 #include "Window.h"
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+#include "Application.h"
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height){
+    glViewport(0, 0, width, height);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+}
 
 int Window::init() {
     // glfw: initialize and configure
@@ -15,7 +21,7 @@ int Window::init() {
 
     // glfw window creation
     // --------------------
-    window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", NULL, NULL);
+    window = glfwCreateWindow(application.getScreenWidth(), application.getScreenHeight(), "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -40,30 +46,12 @@ int Window::init() {
     return 0;
 }
 
-void Window::Update() {
-    // input
-    // -----
-    processInput(window);
 
-    // render
-    // ------
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-    // -------------------------------------------------------------------------------
-    swapBuffers();
-    pollEvents();
-}
 
 void Window::updateScreen() const {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
-void Window::processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+
 

@@ -36,6 +36,7 @@ x64
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+out
 
 # Clion files
 .idea

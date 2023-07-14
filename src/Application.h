@@ -1,38 +1,28 @@
 #pragma once
-
-#include "Window.h"
+#include "../third_parties/glad/glad.h"
 #include "../third_parties/GLFW/include/glfw3.h"
-
+#include "Window.h"
+#include "Scene.h"
 #include <iostream>
+
 
 class Application
 {
 public:
-	Application(): window(*this) {
-	}
+	Application(): window(*this),scene(*this) {}
 
-	int run() {
-		init();
+	int run();
 
-		// render loop
-		// -----------
-		while (!window.shouldClose())
-		{
-			window.Update();
-		}
-		window.terminate();
-		return 0;
-	}
+	unsigned int getScreenWidth() const { return SCR_WIDTH; };
+	unsigned int getScreenHeight() const { return SCR_HEIGHT; };
 
 private:
-	const unsigned int SCR_WIDTH = 800;
-	const unsigned int SCR_HEIGHT = 600;
+	const unsigned int SCR_WIDTH = 1800;
+	const unsigned int SCR_HEIGHT = 1500;
 	Window window;
+	Scene scene;
 
-	void init() {
-		if (window.init() == -1) {
-			std::cerr << "Application : Window.init() Failed." << std::endl;
-		}
-	}
+	void init();
+	void processInput();
 };
 
