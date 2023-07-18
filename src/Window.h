@@ -6,15 +6,13 @@
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 class Application;
 
 class Window
 {
 public:
-	Window(Application& app): application(app) {}
+	Window(Application& app): application(app), window(nullptr) {}
 	Window(const Window&) = delete;
 	Window& operator=(Window const&) = delete;
 

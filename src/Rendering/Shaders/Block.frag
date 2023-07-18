@@ -8,7 +8,5 @@ in vec2 c;
 
 void main()
 {
-    vec4 fc = gl_FragCoord;
-    fc /= 6;
-    FragColor = vec4(vec3(gl_FragCoord.w),1.0);
+    FragColor = texture(ourTexture,c);
 }

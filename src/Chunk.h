@@ -11,8 +11,14 @@ extern const glm::vec3 vertices[];
 class Chunk
 {
 public:
-	Chunk(glm::uvec2 position): size(defaultChunkSize), height(defaultChunkHeight), blockCount(size*size*height),
-											x(position.x), y(position.y), blockMatrix(new BlockType*[blockCount]) {}
+	Chunk(glm::uvec2 position): size(defaultChunkSize), height(defaultChunkHeight), 
+	blockCount(size*size*height), x(position.x), z(position.y), 
+	blockMatrix(new BlockType*[blockCount]) {
+		for (size_t i = 0; i < blockCount; ++i) {
+			blockMatrix[i] = nullptr;
+		}
+		generate();
+	}
 	~Chunk();
 	Chunk(const Chunk&) = delete;
 	Chunk& operator=(Chunk const&) = delete;
@@ -33,7 +39,7 @@ private:
 	const size_t height;
 	const size_t blockCount;
 	const unsigned int x;
-	const unsigned int y;
+	const unsigned int z;
 	bool generated = false;
 	BlockType** blockMatrix;
 };

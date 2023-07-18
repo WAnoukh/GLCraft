@@ -2,7 +2,8 @@
 #include "Camera.h"
 
 bool firstMouse = false;
-float lastX, lastY, deltaTime, lastFrame;
+float lastX, lastY, deltaTime, lastFrame, timeDiff = 0.0f;
+unsigned int counter;
 Camera* mainCamera;
 
 // glfw: whenever the mouse moves, this callback is called
@@ -41,6 +42,10 @@ void Application::processInput()
 	if (glfwGetKey(w, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(w, true);
 
+	if (glfwGetKey(w, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+		mainCamera->ProcessKeyboard(SPRINT, deltaTime);
+	}else
+		mainCamera->ProcessKeyboard(WALK, deltaTime);
 	if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
 		mainCamera->ProcessKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
@@ -49,6 +54,10 @@ void Application::processInput()
 		mainCamera->ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(w, GLFW_KEY_D) == GLFW_PRESS)
 		mainCamera->ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(w, GLFW_KEY_Q) == GLFW_PRESS)
+		mainCamera->ProcessKeyboard(DOWN, deltaTime);
+	if (glfwGetKey(w, GLFW_KEY_E) == GLFW_PRESS)
+		mainCamera->ProcessKeyboard(UP, deltaTime);
 }
 
 void Application::init() {
@@ -77,6 +86,16 @@ int Application::run() {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		timeDiff += deltaTime;
+		counter++;
+		if (timeDiff >= 1.0 / 30.0) {
+			std::string FPS = std::to_string((1.0 / timeDiff) * counter);
+			std::string ms = std::to_string((timeDiff / counter) * 1000);
+			std::string	newTitle = "GLCraft - " + FPS + "FPS / " + ms + "ms";
+			glfwSetWindowTitle(window.getGLFWwindow(), newTitle.c_str());
+			counter = 0;
+			timeDiff = 0.0f;
+		}
 		processInput();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

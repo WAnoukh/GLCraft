@@ -1,0 +1,20 @@
+{
+  "Dirt": {
+    "ID": 0,
+    "TOP": "dirt",
+    "SIDE": "dirt",
+    "DOWN": "dirt"
+  },
+  "Stone": {
+    "ID": 1,
+    "TOP": "stone",
+    "SIDE": "stone",
+    "DOWN": "stone"
+  },
+  "Grass": {
+    "ID": 2,
+    "TOP": "grass_top",
+    "SIDE": "grass_side",
+    "DOWN": "dirt"
+  }
+}

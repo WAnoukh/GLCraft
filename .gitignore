@@ -41,3 +41,6 @@ out
 # Clion files
 .idea
 cmake-build-debug
+
+# Personal Files
+src/Rendering/Textures/AllBlocks

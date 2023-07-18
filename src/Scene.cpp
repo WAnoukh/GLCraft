@@ -6,7 +6,7 @@
 
 
 void Scene::init() {
-	blockTexture = loadTexture("src/Rendering/Textures/dirt.png");
+	blockTexture = loadTexture("src/Rendering/Textures/GLCraft_Atlas.png");
 	blockShader = new Shader("src/Rendering/Shaders/Block.vert", "src/Rendering/Shaders/Block.frag");
 	float* geometry = nullptr;
 	VAO_Length = world.getGeometry(geometry);
@@ -16,11 +16,12 @@ void Scene::init() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* VAO_Length, geometry, GL_STATIC_DRAW);
 	
 	glBindVertexArray(VAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-	
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	blockShader->use();
 	blockShader->setInt("material.diffuse", 0);
 }
