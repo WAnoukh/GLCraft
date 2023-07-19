@@ -194,7 +194,7 @@ void Chunk::generate() {
 }
 
 size_t Chunk::getGeometry(glm::vec2*& uvs, glm::vec3*& verts) {
-    uvs = new glm::vec2[blockCount * 6*6];
+    uvs = new glm::vec2[blockCount * 6 * 6];
     verts = new glm::vec3 [blockCount * 6 * 6];
     for (size_t i = 0; i < blockCount; ++i) {
         if (*blockMatrix[i] == BlockType::Air) { continue; }

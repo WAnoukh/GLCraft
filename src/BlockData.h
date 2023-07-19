@@ -68,7 +68,8 @@ const glm::vec3 FACE_DOWN[6] = {
 	glm::vec3(-0.5f, -0.5f, -0.5f),
 };
 
-const size_t ATLAS_SIZE = 32 * 32;
+const size_t ATLAS_WIDTH = 32;
+const size_t ATLAS_SIZE = ATLAS_WIDTH * ATLAS_WIDTH;
 
 enum class BlockType {
 	Air,
@@ -138,5 +139,6 @@ inline void blockUvs(BlockType bt, glm::vec2& uv) {
 	uv /= 32;
 }
 
+glm::vec2 textureIdToUv(unsigned short int id);
 
-size_t copyBlockGeometry(BlockType bt, glm::vec3*& verts, glm::vec2*& uvs, size_t beggin);
+size_t copyBlockGeometry(unsigned short id, glm::vec3*& verts, glm::vec2*& uvs, size_t beggin);
