@@ -1,20 +1,30 @@
 {
-  "Dirt": {
+  "Air": {
     "ID": 0,
-    "TOP": "dirt",
-    "SIDE": "dirt",
-    "DOWN": "dirt"
+    "TOP": "stone",
+    "SIDE": "stone",
+    "DOWN": "stone",
+    "OPACITY": "invisible"
   },
   "Stone": {
     "ID": 1,
     "TOP": "stone",
     "SIDE": "stone",
-    "DOWN": "stone"
+    "DOWN": "stone",
+    "OPACITY": "opaque"
+  },
+  "Dirt": {
+    "ID": 2,
+    "TOP": "dirt",
+    "SIDE": "dirt",
+    "DOWN": "dirt",
+    "OPACITY": "opaque"
   },
   "Grass": {
-    "ID": 2,
+    "ID": 3,
     "TOP": "grass_top",
     "SIDE": "grass_side",
-    "DOWN": "dirt"
+    "DOWN": "dirt",
+    "OPACITY": "opaque"
   }
 }

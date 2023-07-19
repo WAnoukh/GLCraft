@@ -73,6 +73,8 @@ void Application::init() {
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+
+	BlockManager::getInstance();
 }
 
 int Application::run() {

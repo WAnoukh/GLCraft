@@ -5,15 +5,17 @@
 extern size_t defaultChunkHeight;
 extern size_t defaultChunkSize;
 
+/*
 extern const float cubeUvs[];
 extern const glm::vec3 vertices[];
+*/
 
 class Chunk
 {
 public:
 	Chunk(glm::uvec2 position): size(defaultChunkSize), height(defaultChunkHeight), 
 	blockCount(size*size*height), x(position.x), z(position.y), 
-	blockMatrix(new BlockType*[blockCount]) {
+	blockMatrix(new unsigned short int*[blockCount]) {
 		for (size_t i = 0; i < blockCount; ++i) {
 			blockMatrix[i] = nullptr;
 		}
@@ -28,7 +30,7 @@ public:
 	size_t getBlockCount() const { return blockCount; }
 	size_t getBlockIndex(glm::uvec3 position);
 	glm::uvec3 getIndexPos(size_t index);
-	BlockType getBlock(glm::uvec3 position);
+	BlockId getBlock(glm::uvec3 position);
 
 	void generate();
 
@@ -41,6 +43,6 @@ private:
 	const unsigned int x;
 	const unsigned int z;
 	bool generated = false;
-	BlockType** blockMatrix;
+	unsigned short int** blockMatrix;
 };
 

@@ -27,47 +27,101 @@ void BlockManager::refreshData() {
 	json blockData = json::parse(f2);
 	size_t count = 0;
 	for (json::iterator it = blockData.begin(); it != blockData.end(); ++it) {
-		BlockData& curBlock = blocksData[count];
+		BlockData& curBlock = blocksData[(*it)["ID"]];
 		curBlock.name = it.key();
-		curBlock.ID = count;
-		curBlock.TextureUp = textureNameMap[(*it)["TOP"]];
-		curBlock.TextureSide = textureNameMap[(*it)["SIDE"]];
-		curBlock.TextureDown = textureNameMap[(*it)["DOWN"]];
+		curBlock.ID = (*it)["ID"];
+
+		const std::string str_null = "null";
+
+		std::cout << (*it)["TOP"] << std::endl;
+		if ((*it)["TOP"] != "null") {
+			curBlock.TextureUp = textureNameMap[(*it)["TOP"]];
+		}
+
+		if ((*it)["TOP"] != str_null) {
+			curBlock.TextureSide = textureNameMap[(*it)["SIDE"]];
+		}
+
+		if ((*it)["TOP"] != str_null) {
+			curBlock.TextureDown = textureNameMap[(*it)["DOWN"]];
+		}
+
+		if ((*it)["OPACITY"] != str_null) {
+			if ((*it)["OPACITY"] == "opaque") {
+				curBlock.opacity = 1;
+			}else if ((*it)["OPACITY"] == "transparent") {
+				curBlock.opacity = 2;
+			}else if ((*it)["OPACITY"] == "semi-transparent") {
+				curBlock.opacity = 3;
+			}
+		}
+
+
 		++count;
 	}
 	blocksDataSize = count;
 }
 
-size_t copyBlockGeometry(unsigned short id, glm::vec3*& verts, glm::vec2*& uvs, const size_t beggin) {
+size_t copyBlockGeometry(BlockId id, glm::vec3*& verts, glm::vec2*& uvs, const size_t beginning, char neighbor) {
 	BlockData& curBlock = BlockManager::getInstance().getBlockData(id);
 
+	size_t written = 0;
+
 	// TOP FACE
-	glm::vec2 topUvOffset = textureIdToUv(curBlock.TextureUp);
-	for (size_t i = 0; i < 6; ++i) {
-		verts[beggin + i] = FACE_UP[i];
-		uvs[beggin + i] = FACE_UV[i] + topUvOffset;
+	if ((neighbor >> 0) & 1) { //Checking the first bit
+		glm::vec2 topUvOffset = textureIdToUv(curBlock.TextureUp);
+		for (size_t i = 0; i < 6; ++i) {
+			verts[beginning + i] = FACE_UP[i];
+			uvs[beginning + i] = (FACE_UV[i] + topUvOffset) / static_cast<float>(ATLAS_WIDTH);
+		}
+		written += 6;
 	}
 
 	// BOTTOM FACE
-	glm::vec2 bottomUvOffset = textureIdToUv(curBlock.TextureDown);
-	for (size_t i = 0; i < 6; ++i) {
-		verts[beggin + 6 + i] = FACE_DOWN[i];
-		uvs[beggin + 6 + i] = FACE_UV[i] + bottomUvOffset;
+	if ((neighbor >> 1) & 1) {//Checking the second bit
+		glm::vec2 bottomUvOffset = textureIdToUv(curBlock.TextureDown);
+		for (size_t i = 0; i < 6; ++i) {
+			verts[beginning + written + i] = FACE_DOWN[i];
+			uvs[beginning + written + i] = (FACE_UV[i] + bottomUvOffset) / static_cast<float>(ATLAS_WIDTH);
+		}
+		written += 6;
 	}
 
 	// SIDE FACE
-	glm::vec2 sideUvOffset = textureIdToUv(curBlock.TextureDown);
-	for (size_t i = 0; i < 6; ++i) {
-		glm::vec2 sideUv = FACE_UV[i] + sideUvOffset;
-		verts[beggin + 12 + i] = FACE_EAST[i];
-		verts[beggin + 18 + i] = FACE_NORTH[i];
-		verts[beggin + 24 + i]	 = FACE_WEST[i];
-		verts[beggin + 30 + i] = FACE_SOUTH[i];
-		for (size_t j = 0; j < 6; ++j) {
-			uvs[beggin + j*6 + 12 + i] = sideUv;
+	glm::vec2 sideUvOffset = textureIdToUv(curBlock.TextureSide);
+	if ((neighbor >> 2) & 1) {
+		for (size_t i = 0; i < 6; ++i) {
+			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
+			verts[beginning + written + i] = FACE_NORTH[i];
+			uvs[beginning + written + i] = sideUv;
 		}
+		written += 6;
 	}
-	return static_cast<size_t>(6) * 6;
+	if ((neighbor >> 3) & 1) {
+		for (size_t i = 0; i < 6; ++i) {
+			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
+			verts[beginning + written + i] = FACE_EAST[i];
+			uvs[beginning + written + i] = sideUv;
+		}
+		written += 6;
+	}
+	if ((neighbor >> 4) & 1) {
+		for (size_t i = 0; i < 6; ++i) {
+			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
+			verts[beginning + written + i] = FACE_SOUTH[i];
+			uvs[beginning + written + i] = sideUv;
+		}
+		written += 6;
+	}
+	if ((neighbor >> 5) & 1) {
+		for (size_t i = 0; i < 6; ++i) {
+			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
+			verts[beginning + written + i] = FACE_WEST[i];
+			uvs[beginning + written + i] = sideUv;
+		}
+		written += 6;
+	}
+	return beginning + written;
 }
 
 glm::vec2 textureIdToUv(unsigned short int id) {

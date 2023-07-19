@@ -1,10 +1,17 @@
 #include "Chunk.h"
 
+const BlockId AIR   = 0;
+const BlockId STONE = 1;
+const BlockId DIRT  = 2;
+const BlockId GRASS = 3;
+
+
 //size_t defaultChunkHeight = 200;
 //size_t defaultChunkSize = 32;
 size_t defaultChunkHeight = 200;
 size_t defaultChunkSize = 16;
 
+/*
 const float cubeUvs[] = {
     // texture coords
     0.0f,  1.0f,
@@ -49,8 +56,10 @@ const float cubeUvs[] = {
     1.0f,  1.0f,
     1.0f,  0.0f,
 };
+*/
 
-/*const glm::vec3 vertices[] = {
+/*
+const glm::vec3 vertices[] = {
     glm::vec3(-0.5f, -0.5f, -0.5f),
     glm::vec3(0.5f, -0.5f, -0.5f),
     glm::vec3(0.5f,  0.5f, -0.5f),
@@ -93,8 +102,10 @@ const float cubeUvs[] = {
     glm::vec3(-0.5f,  0.5f,  0.5f),
     glm::vec3(-0.5f,  0.5f, -0.5f)
 
-};*/
+};
+*/
 
+/*
 const glm::vec3 vertices[] = {
     glm::vec3(-0.5f, -0.5f,  0.5f),
     glm::vec3( 0.5f, -0.5f,  0.5f),
@@ -139,6 +150,7 @@ const glm::vec3 vertices[] = {
     glm::vec3(-0.5f,  -0.5f, -0.5f),
 
 };
+*/
 
 
 void setChunkSize(size_t newSize) {
@@ -158,7 +170,7 @@ Chunk::~Chunk() {
 	delete[] blockMatrix;
 }
 
-BlockType Chunk::getBlock(glm::uvec3 position) {
+BlockId Chunk::getBlock(glm::uvec3 position) {
 	if (position.x >= size || position.z >= size || position.y >= height) {
 		throw "Chunk.position invalid argument : argument is too large";
 	}
@@ -172,20 +184,20 @@ void Chunk::generate() {
 	for (size_t ix = 0; ix < size; ++ix) {
 		for (size_t iy = 0; iy < height; ++iy) {
 			for (size_t iz = 0; iz < size; ++iz) {
-				BlockType type = BlockType::Air;
+                BlockId type = AIR;
                 if (iy < groundHeight -1) {
                     if (iy < groundHeight - rockDepth) {
-                        type = BlockType::Stone;
+                        type = STONE;
                     }
                     else {
-                        type = BlockType::Dirt;
+                        type = DIRT;
                     }
                 }else if (iy < groundHeight) {
-                    type = BlockType::Grass;
+                    type = GRASS;
                 }
 				size_t index = getBlockIndex(glm::uvec3(ix, iy, iz));
                 if (!blockMatrix[index] ) { 
-                    blockMatrix[index] = new BlockType; 
+                    blockMatrix[index] = new BlockId;
                 }
                 *blockMatrix[index] = type;
 			}
@@ -195,18 +207,21 @@ void Chunk::generate() {
 
 size_t Chunk::getGeometry(glm::vec2*& uvs, glm::vec3*& verts) {
     uvs = new glm::vec2[blockCount * 6 * 6];
-    verts = new glm::vec3 [blockCount * 6 * 6];
+    verts = new glm::vec3[blockCount * 6 * 6];
+    size_t length = 0;
     for (size_t i = 0; i < blockCount; ++i) {
-        if (*blockMatrix[i] == BlockType::Air) { continue; }
-        glm::vec3 pos = getIndexPos(i);
-        for (size_t j = 0; j < 6 * 6; ++j) {
-            verts[i * 6 * 6 + j] = vertices[j] + pos;
-            glm::vec2 newUVs = glm::vec2(cubeUvs[2 * j], cubeUvs[2 * j + 1]);
-            blockUvs(*blockMatrix[i], newUVs);
-            uvs[i * 6 * 6 + j] = newUVs;
+        BlockManager& bm = BlockManager::getInstance();
+        if (bm.getBlockOpacity(* blockMatrix[i]) == 0) { //if block invisible
+            continue; 
         }
+        glm::vec3 pos = getIndexPos(i);
+        size_t newLength = copyBlockGeometry(*blockMatrix[i], verts, uvs, length, 0b00111111);
+        for (size_t j = length; j < newLength; ++j) {
+            verts[j] += pos;
+        }
+        length = newLength;
     }
-	return blockCount * 6 * 6;
+    return length;
 }
 
 size_t Chunk::getBlockIndex(glm::uvec3 position) {

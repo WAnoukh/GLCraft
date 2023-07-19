@@ -39,7 +39,7 @@ int Window::init() {
         return -1;
     }
 
-
+    //glfwSwapInterval(0);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
