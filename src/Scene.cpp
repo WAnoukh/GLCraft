@@ -35,7 +35,7 @@ void Scene::render() {
 	//glBindVertexArray(VAO);
 	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	glm::mat4 projection = glm::perspective(glm::radians(mainCamera.Zoom), (float)application.getScreenWidth() / (float)application.getScreenHeight(), 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(mainCamera.Zoom), (float)application.getScreenWidth() / (float)application.getScreenHeight(), 0.1f, 1000.0f);
 	glm::mat4 view = mainCamera.GetViewMatrix();
 	blockShader->setMat4("projection", projection);
 	blockShader->setMat4("view", view);

@@ -11,148 +11,6 @@ const BlockId GRASS = 3;
 size_t defaultChunkHeight = 200;
 size_t defaultChunkSize = 16;
 
-/*
-const float cubeUvs[] = {
-    // texture coords
-    0.0f,  1.0f,
-    1.0f,  1.0f,
-    0.0f,  0.0f,
-    0.0f,  0.0f,
-    1.0f,  1.0f,
-    1.0f,  0.0f,
-
-    0.0f,  1.0f,
-    1.0f,  1.0f,
-    0.0f,  0.0f,
-    0.0f,  0.0f,
-    1.0f,  1.0f,
-    1.0f,  0.0f,
-
-    0.0f,  1.0f,
-    1.0f,  1.0f,
-    0.0f,  0.0f,
-    0.0f,  0.0f,
-    1.0f,  1.0f,
-    1.0f,  0.0f,
-
-    0.0f,  1.0f,
-    1.0f,  1.0f,
-    0.0f,  0.0f,
-    0.0f,  0.0f,
-    1.0f,  1.0f,
-    1.0f,  0.0f,
-
-    0.0f,  1.0f,
-    1.0f,  1.0f,
-    0.0f,  0.0f,
-    0.0f,  0.0f,
-    1.0f,  1.0f,
-    1.0f,  0.0f,
-
-    0.0f,  1.0f,
-    1.0f,  1.0f,
-    0.0f,  0.0f,
-    0.0f,  0.0f,
-    1.0f,  1.0f,
-    1.0f,  0.0f,
-};
-*/
-
-/*
-const glm::vec3 vertices[] = {
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f,  0.5f, -0.5f),
-    glm::vec3(0.5f,  0.5f, -0.5f),
-    glm::vec3(-0.5f,  0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(0.5f,  0.5f,  0.5f),
-    glm::vec3(0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-
-    glm::vec3(-0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f,  0.5f),
-
-    glm::vec3(0.5f,  0.5f,  0.5f),
-    glm::vec3(0.5f,  0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(0.5f,  0.5f,  0.5f),
-
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-
-    glm::vec3(-0.5f,  0.5f, -0.5f),
-    glm::vec3(0.5f,  0.5f, -0.5f),
-    glm::vec3(0.5f,  0.5f,  0.5f),
-    glm::vec3(0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f, -0.5f)
-
-};
-*/
-
-/*
-const glm::vec3 vertices[] = {
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f,  0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-    glm::vec3( 0.5f,  0.5f,  0.5f),
-
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f,  0.5f,  0.5f),
-    glm::vec3( 0.5f,  0.5f,  0.5f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f,  0.5f, -0.5f),
-
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f,  0.5f, -0.5f),
-    glm::vec3( 0.5f,  0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f,  0.5f, -0.5f),
-
-    glm::vec3( -0.5f, -0.5f, -0.5f),
-    glm::vec3( -0.5f, -0.5f,  0.5f),
-    glm::vec3( -0.5f,  0.5f, -0.5f),
-    glm::vec3( -0.5f,  0.5f, -0.5f),
-    glm::vec3( -0.5f, -0.5f,  0.5f),
-    glm::vec3( -0.5f,  0.5f,  0.5f),
-
-    glm::vec3(-0.5f, 0.5f,  0.5f),
-    glm::vec3( 0.5f, 0.5f,  0.5f),
-    glm::vec3(-0.5f, 0.5f, -0.5f),
-    glm::vec3(-0.5f, 0.5f, -0.5f),
-    glm::vec3( 0.5f, 0.5f,  0.5f),
-    glm::vec3(0.5f, 0.5f, -0.5f),
-
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f,  -0.5f,  0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f,  -0.5f,  0.5f),
-    glm::vec3(-0.5f,  -0.5f, -0.5f),
-
-};
-*/
-
-
 void setChunkSize(size_t newSize) {
 	defaultChunkSize = newSize;
 }
@@ -164,7 +22,8 @@ void setChunkHeight(size_t newHeight) {
 Chunk::~Chunk() {
 	if (generated){
 		for (size_t i = 0; i < blockCount; ++i) {
-			delete blockMatrix[i];
+			if (blockMatrix[i])
+				delete blockMatrix[i];
 		}
 	}
 	delete[] blockMatrix;
@@ -206,22 +65,22 @@ void Chunk::generate() {
 }
 
 size_t Chunk::getGeometry(glm::vec2*& uvs, glm::vec3*& verts) {
-    uvs = new glm::vec2[blockCount * 6 * 6];
-    verts = new glm::vec3[blockCount * 6 * 6];
-    size_t length = 0;
-    for (size_t i = 0; i < blockCount; ++i) {
-        BlockManager& bm = BlockManager::getInstance();
-        if (bm.getBlockOpacity(* blockMatrix[i]) == 0) { //if block invisible
-            continue; 
-        }
-        glm::vec3 pos = getIndexPos(i);
-        size_t newLength = copyBlockGeometry(*blockMatrix[i], verts, uvs, length, 0b00111111);
-        for (size_t j = length; j < newLength; ++j) {
-            verts[j] += pos;
-        }
-        length = newLength;
-    }
-    return length;
+	uvs = new glm::vec2[blockCount * 6 * 6];
+	verts = new glm::vec3[blockCount * 6 * 6];
+	size_t length = 0;
+	for (size_t i = 0; i < blockCount; ++i) {
+		BlockManager& bm = BlockManager::getInstance();
+		if (bm.getBlockOpacity(*blockMatrix[i]) == 0) { //if block invisible
+			continue;
+		}
+		glm::vec3 pos = getIndexPos(i);
+		size_t newLength = copyBlockGeometry(*blockMatrix[i], verts, uvs, length, 0b00111111);
+		for (size_t j = length; j < newLength; ++j) {
+			verts[j] += pos + (position * static_cast<float>(size));
+		}
+		length = newLength;
+	}
+	return length;
 }
 
 size_t Chunk::getBlockIndex(glm::uvec3 position) {
