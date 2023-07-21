@@ -15,13 +15,14 @@ public:
 	World();
 
 	size_t getGeometry(float*& geometry);
+	bool isBlockLoaded(glm::vec3 pos);
+	BlockId getBlock (glm::vec3 pos) const;
 private:
 	size_t size = 10;
 	Chunk** chunks;
 
-	size_t posToIndex(int x, int z);
-
-	void indexToPos(size_t index, int& x, int& y);
+	size_t posToIndex(int x, int z) const;
+	void indexToPos(size_t index, int& x, int& y) const;
 	
 };
 

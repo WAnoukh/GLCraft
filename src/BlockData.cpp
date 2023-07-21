@@ -68,7 +68,7 @@ size_t copyBlockGeometry(BlockId id, glm::vec3*& verts, glm::vec2*& uvs, const s
 	size_t written = 0;
 
 	// TOP FACE
-	if ((neighbor >> 0) & 1) { //Checking the first bit
+	if (neighbor & 1) { //Checking the first bit
 		glm::vec2 topUvOffset = textureIdToUv(curBlock.TextureUp);
 		for (size_t i = 0; i < 6; ++i) {
 			verts[beginning + i] = FACE_UP[i];

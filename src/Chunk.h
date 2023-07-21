@@ -14,8 +14,8 @@ class Chunk
 {
 public:
 	Chunk(glm::uvec2 position): size(defaultChunkSize), height(defaultChunkHeight), 
-	blockCount(size*size*height), x(position.x), z(position.y), 
-	position(position.x, 0.0f, position.y),
+	blockCount(size*size*height), chunkX(position.x), chunkZ(position.y),
+	chunkPos(position.x, 0.0f, position.y),
 	blockMatrix(new unsigned short int*[blockCount]) {
 		for (size_t i = 0; i < blockCount; ++i) {
 			blockMatrix[i] = nullptr;
@@ -28,9 +28,11 @@ public:
 	size_t getSize() const { return size; }
 	size_t getHeight() const { return height; }
 	size_t getBlockCount() const { return blockCount; }
-	size_t getBlockIndex(glm::uvec3 position);
-	glm::uvec3 getIndexPos(size_t index);
-	BlockId getBlock(glm::uvec3 position);
+	size_t getBlockIndexFromLocalPos(glm::uvec3 position);
+	glm::uvec3 getIndexLocalPos(size_t index);
+	glm::vec3 getIndexWorldPos(size_t index);
+	BlockId getBlock(glm::vec3 position);
+	bool isBlockInChunk(glm::vec3 position);
 
 	void generate();
 
@@ -40,9 +42,9 @@ private:
 	const size_t size;
 	const size_t height;
 	const size_t blockCount;
-	const unsigned int x;
-	const unsigned int z;
-	const glm::vec3 position;
+	const unsigned int chunkX;
+	const unsigned int chunkZ;
+	const glm::vec3 chunkPos;
 	bool generated = false;
 	unsigned short int** blockMatrix;
 };

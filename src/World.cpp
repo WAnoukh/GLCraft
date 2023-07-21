@@ -43,14 +43,27 @@ size_t World::getGeometry(float*& geometry) {
 	return written;
 }
 
-size_t World::posToIndex(int x, int z) {
+bool World::isBlockLoaded(glm::vec3 pos) {
+	return pos.x < 0 || pos.y < 0 || pos.z < 0 || pos.x > size * defaultChunkSize || pos.y > defaultChunkHeight || pos.z > size * defaultChunkSize;
+}
+
+BlockId World::getBlock(glm::vec3 pos) const {
+	if (pos.x < 0 || pos.y < 0 || pos.z < 0 || pos.x > size * defaultChunkSize || pos.y > defaultChunkHeight || pos.z > size * defaultChunkSize) {
+		throw "World::getBlock error : block not loaded";
+	}
+	int chunkX = static_cast<int>(pos.x) / size, chunkZ = static_cast<int>(pos.z) / size;
+	Chunk& blockChunk = *chunks[posToIndex(chunkX,chunkZ)];
+	return blockChunk.getBlock(pos);
+}
+
+size_t World::posToIndex(int x, int z) const {
 	if (x > size || x < 0 || z > size || z < 0) {
 		throw "World::posToIndex error : pos outside the world !";
 	}
 	return static_cast<size_t>(x + z * size);
 }
 
-void World::indexToPos(size_t index, int& x, int& y) {
+void World::indexToPos(size_t index, int& x, int& y) const {
 	if (index > size * size) {
 		throw "World::posToIndex error : index too large !";
 	}

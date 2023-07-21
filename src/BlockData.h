@@ -73,6 +73,16 @@ const glm::vec3 FACE_DOWN[6] = {
 const size_t ATLAS_WIDTH = 32;
 const size_t ATLAS_SIZE = ATLAS_WIDTH * ATLAS_WIDTH;
 
+namespace Opacity {
+	const unsigned short int INVISIBLE = 0;
+	const unsigned short int OPAQUE = 1;
+	const unsigned short int TRANSPARENT = 2;
+	const unsigned short int SEMI_TRANSPARENT = 3;
+
+}
+
+
+
 /*enum class BlockType {
 	Air,
 	Dirt,
