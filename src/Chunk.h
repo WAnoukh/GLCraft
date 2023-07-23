@@ -36,7 +36,7 @@ public:
 
 	void generate();
 
-	size_t getGeometry(glm::vec2*& uvs, glm::vec3*& verts);
+	size_t getGeometry(glm::vec3*& uvs, glm::vec3*& verts);
 
 private:
 	const size_t size;
