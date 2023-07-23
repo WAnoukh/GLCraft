@@ -12,21 +12,22 @@ size_t World::getGeometry(float*& geometry) {
 	ChunkGeometry* chunkGeometries = new ChunkGeometry[size * size];
 	size_t totalLength = 0;
 	for (size_t i = 0; i < size * size; ++i) {
-		glm::vec2* uvs;
+		glm::vec3* uvs;
 		glm::vec3* vertices;
 		size_t length = chunks[i]->getGeometry(uvs, vertices);
-		geometry = new float[length * 5];
+		geometry = new float[length * 6];
 		for (size_t j = 0; j < length; ++j) {
-			geometry[j * 5] = vertices[j].x;
-			geometry[j * 5 + 1] = vertices[j].y;
-			geometry[j * 5 + 2] = vertices[j].z;
-			geometry[j * 5 + 3] = uvs[j].x;
-			geometry[j * 5 + 4] = uvs[j].y;
+			geometry[j * 6] = vertices[j].x;
+			geometry[j * 6 + 1] = vertices[j].y;
+			geometry[j * 6 + 2] = vertices[j].z;
+			geometry[j * 6 + 3] = uvs[j].x;
+			geometry[j * 6 + 4] = uvs[j].y;
+			geometry[j * 6 + 5] = uvs[j].z;
 		}
 		delete[] uvs;
 		delete[] vertices;
-		chunkGeometries[i] = { geometry, length*5 };
-		totalLength += length*5;
+		chunkGeometries[i] = { geometry, length*6 };
+		totalLength += length*6;
 	}
 	geometry = new float[totalLength];
 	size_t written = 0;

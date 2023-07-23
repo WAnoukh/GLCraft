@@ -133,4 +133,4 @@ private:
 
 glm::vec2 textureIdToUv(unsigned short int id);
 
-size_t copyBlockGeometry(BlockId id, glm::vec3*& verts, glm::vec2*& uvs, size_t beginning, char neighbor);
+size_t copyBlockGeometry(BlockId id, glm::vec3*& verts, glm::vec3*& uvs, size_t beginning, char neighbor);

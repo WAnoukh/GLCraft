@@ -84,8 +84,8 @@ void Chunk::generate() {
 	}
 }
 
-size_t Chunk::getGeometry(glm::vec2*& uvs, glm::vec3*& verts) {
-	uvs = new glm::vec2[blockCount * 6 * 6];
+size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
+	uvs = new glm::vec3[blockCount * 6 * 6];
 	verts = new glm::vec3[blockCount * 6 * 6];
 	size_t length = 0;
 	for (size_t i = 0; i < blockCount; ++i) {

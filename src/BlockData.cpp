@@ -1,6 +1,5 @@
 #include "BlockData.h"
 #include "../third_parties/json/json.hpp"
-#include "../third_parties/json/json.hpp"
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -62,62 +61,59 @@ void BlockManager::refreshData() {
 	blocksDataSize = count;
 }
 
-size_t copyBlockGeometry(BlockId id, glm::vec3*& verts, glm::vec2*& uvs, const size_t beginning, char neighbor) {
+size_t copyBlockGeometry(BlockId id, glm::vec3*& verts, glm::vec3*& uvs, const size_t beginning, char neighbor) {
 	BlockData& curBlock = BlockManager::getInstance().getBlockData(id);
 
 	size_t written = 0;
 
 	// TOP FACE
 	if (neighbor & 1) { //Checking the first bit
-		glm::vec2 topUvOffset = textureIdToUv(curBlock.TextureUp);
 		for (size_t i = 0; i < 6; ++i) {
 			verts[beginning + i] = FACE_UP[i];
-			uvs[beginning + i] = (FACE_UV[i] + topUvOffset) / static_cast<float>(ATLAS_WIDTH);
+			uvs[beginning + i] = glm::vec3(FACE_UV[i].x, FACE_UV[i].y, curBlock.TextureUp);
 		}
 		written += 6;
 	}
 
 	// BOTTOM FACE
 	if ((neighbor >> 1) & 1) {//Checking the second bit
-		glm::vec2 bottomUvOffset = textureIdToUv(curBlock.TextureDown);
 		for (size_t i = 0; i < 6; ++i) {
 			verts[beginning + written + i] = FACE_DOWN[i];
-			uvs[beginning + written + i] = (FACE_UV[i] + bottomUvOffset) / static_cast<float>(ATLAS_WIDTH);
+			uvs[beginning + written + i] = glm::vec3(FACE_UV[i].x, FACE_UV[i].y, curBlock.TextureDown);
 		}
 		written += 6;
 	}
 
 	// SIDE FACE
-	glm::vec2 sideUvOffset = textureIdToUv(curBlock.TextureSide);
 	if ((neighbor >> 2) & 1) {
 		for (size_t i = 0; i < 6; ++i) {
-			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
 			verts[beginning + written + i] = FACE_NORTH[i];
-			uvs[beginning + written + i] = sideUv;
+			//uvs[beginning + written + i] = sideUv;
+			uvs[beginning + written + i] = glm::vec3(FACE_UV[i].x, FACE_UV[i].y, curBlock.TextureSide);
 		}
 		written += 6;
 	}
 	if ((neighbor >> 3) & 1) {
 		for (size_t i = 0; i < 6; ++i) {
-			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
 			verts[beginning + written + i] = FACE_EAST[i];
-			uvs[beginning + written + i] = sideUv;
+			//uvs[beginning + written + i] = sideUv;
+			uvs[beginning + written + i] = glm::vec3(FACE_UV[i].x, FACE_UV[i].y, curBlock.TextureSide);
 		}
 		written += 6;
 	}
 	if ((neighbor >> 4) & 1) {
 		for (size_t i = 0; i < 6; ++i) {
-			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
 			verts[beginning + written + i] = FACE_SOUTH[i];
-			uvs[beginning + written + i] = sideUv;
+			//uvs[beginning + written + i] = sideUv;
+			uvs[beginning + written + i] = glm::vec3(FACE_UV[i].x, FACE_UV[i].y, curBlock.TextureSide);
 		}
 		written += 6;
 	}
 	if ((neighbor >> 5) & 1) {
 		for (size_t i = 0; i < 6; ++i) {
-			glm::vec2 sideUv = (FACE_UV[i] + sideUvOffset) / static_cast<float>(ATLAS_WIDTH);
 			verts[beginning + written + i] = FACE_WEST[i];
-			uvs[beginning + written + i] = sideUv;
+			//uvs[beginning + written + i] = sideUv;
+			uvs[beginning + written + i] = glm::vec3(FACE_UV[i].x, FACE_UV[i].y, curBlock.TextureSide);
 		}
 		written += 6;
 	}
