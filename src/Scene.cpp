@@ -10,6 +10,7 @@ void Scene::init() {
 	blockShader = new Shader("src/Rendering/Shaders/Block.vert", "src/Rendering/Shaders/Block.frag");
 	float* geometry = nullptr;
 	VAO_Length = world.getGeometry(geometry);
+	std::cout << VAO_Length << " vao l" << std::endl;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -24,6 +25,7 @@ void Scene::init() {
 	glCullFace(GL_BACK);
 	blockShader->use();
 	blockShader->setInt("material.diffuse", 0);
+	delete[] geometry;
 }
 
 void Scene::render() {

@@ -22,12 +22,6 @@ void setChunkHeight(size_t newHeight) {
 }
 
 Chunk::~Chunk() {
-	if (generated){
-		for (size_t i = 0; i < blockCount; ++i) {
-			if (blockMatrix[i])
-				delete blockMatrix[i];
-		}
-	}
 	delete[] blockMatrix;
 }
 
@@ -36,7 +30,7 @@ BlockId Chunk::getBlock(glm::vec3 worldPos) {
 	if (isBlockInChunk(worldPos)) {
 		throw "Chunk.position invalid argument : argument is too large";
 	}
-	return *blockMatrix[getBlockIndexFromLocalPos(static_cast<glm::uvec3>(worldPos))];
+	return blockMatrix[getBlockIndexFromLocalPos(static_cast<glm::uvec3>(worldPos))];
 }
 
 bool Chunk::isBlockInChunk(glm::vec3 worldPos) {
@@ -80,10 +74,7 @@ void Chunk::generate() {
                     type = GRASS;
                 }
 				size_t index = getBlockIndexFromLocalPos(glm::uvec3(ix, iy, iz));
-                if (!blockMatrix[index] ) { 
-                    blockMatrix[index] = new BlockId;
-                }
-                *blockMatrix[index] = type;
+                blockMatrix[index] = type;
 			}
 		}
 	}
@@ -95,7 +86,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 	size_t length = 0;
 	for (size_t i = 0; i < blockCount; ++i) {
 		BlockManager& bm = BlockManager::getInstance();
-		if (bm.getBlockOpacity(*blockMatrix[i]) == 0) { //if block invisible
+		if (bm.getBlockOpacity(blockMatrix[i]) == 0) { //if block invisible
 			continue;
 		}
 		glm::uvec3 pos = getIndexLocalPos(i);
@@ -106,7 +97,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 		//Top face
 		if (pos.y < height - 1) { //Not the highest layer
 			size_t index = getBlockIndexFromLocalPos(pos + glm::uvec3(0.0f, 1.0f, 0.0f));
-			BlockId& topBlock = *blockMatrix[index];
+			BlockId& topBlock = blockMatrix[index];
 			if (bm.getBlockOpacity(topBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~1; // editing the first bit
 			}
@@ -115,7 +106,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 		//Bottom face
 		if (pos.y > 0) { 
 			size_t index = getBlockIndexFromLocalPos(pos + glm::uvec3(0.0f, -1.0f, 0.0f));
-			BlockId botBlock = *blockMatrix[index];
+			BlockId botBlock = blockMatrix[index];
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 1); // editing the second bit
 			}
@@ -123,7 +114,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 
 		if (pos.x < size -1) { //NORTH
 			size_t index = getBlockIndexFromLocalPos(pos + glm::uvec3(1.0f, 0.0f, 0.0f));
-			BlockId botBlock = *blockMatrix[index];
+			BlockId botBlock = blockMatrix[index];
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 2); // editing the second bit
 			}
@@ -135,7 +126,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 
 		if (pos.z < size - 1) { //EAST
 			size_t index = getBlockIndexFromLocalPos(pos + glm::uvec3(0.0f, 0.0f, 1.0f));
-			BlockId botBlock = *blockMatrix[index];
+			BlockId botBlock = blockMatrix[index];
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 3); // editing the second bit
 			}
@@ -147,7 +138,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 
 		if (pos.x > 0) { //SOUTH
 			size_t index = getBlockIndexFromLocalPos(pos + glm::uvec3(-1.0f, 0.0f, 0.0f));
-			BlockId botBlock = *blockMatrix[index];
+			BlockId botBlock = blockMatrix[index];
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 4); // editing the second bit
 			}
@@ -159,7 +150,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 
 		if (pos.z > 0) { //WEST
 			size_t index = getBlockIndexFromLocalPos(pos + glm::uvec3(0.0f, 0.0f, -1.0f));
-			BlockId botBlock = *blockMatrix[index];
+			BlockId botBlock = blockMatrix[index];
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 5); // editing the second bit
 			}
@@ -169,13 +160,12 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 			occlusionMask &= ~(1 << 5);
 		}
 
-		size_t newLength = copyBlockGeometry(*blockMatrix[i], verts, uvs, length, occlusionMask);
+		size_t newLength = copyBlockGeometry(blockMatrix[i], verts, uvs, length, occlusionMask);
 		for (size_t j = length; j < newLength; ++j) {
 			verts[j] += static_cast<glm::vec3>(pos) + (chunkPos * static_cast<float>(size));
 		}
 		length = newLength;
 	}
-	std::cout << length << std::endl;
 	return length;
 }
 

@@ -18,10 +18,7 @@ public:
 	Chunk(glm::uvec2 position, World& world) : world(world), size(defaultChunkSize), height(defaultChunkHeight),
 	blockCount(size*size*height), chunkX(position.x), chunkZ(position.y),
 	chunkPos(position.x, 0.0f, position.y),
-	blockMatrix(new unsigned short int*[blockCount]) {
-		for (size_t i = 0; i < blockCount; ++i) {
-			blockMatrix[i] = nullptr;
-		}
+	blockMatrix(new unsigned short int[blockCount]) {
 		generate();
 	}
 	~Chunk();
@@ -49,6 +46,6 @@ private:
 	const unsigned int chunkZ;
 	const glm::vec3 chunkPos;
 	bool generated = false;
-	unsigned short int** blockMatrix;
+	unsigned short int* blockMatrix;
 };
 

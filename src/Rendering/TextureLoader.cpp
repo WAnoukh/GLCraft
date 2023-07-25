@@ -87,6 +87,7 @@ unsigned int loadAtlas(char const* path) {
         glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         stbi_image_free(data);
+        delete[] data2;
     }
     else
     {

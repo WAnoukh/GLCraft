@@ -19,6 +19,7 @@ public:
 private:
 	const unsigned int SCR_WIDTH = 1800;
 	const unsigned int SCR_HEIGHT = 1500;
+	int swapInterval = 0;
 	Window window;
 	Scene scene;
 

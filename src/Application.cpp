@@ -48,6 +48,10 @@ void Application::processInput()
 		mainCamera->ProcessKeyboard(WALK, deltaTime);
 	if (glfwGetKey(w, GLFW_KEY_W) == GLFW_PRESS)
 		mainCamera->ProcessKeyboard(FORWARD, deltaTime);
+	if (glfwGetKey(w, GLFW_KEY_V) == GLFW_PRESS) {
+		swapInterval = !swapInterval;
+		glfwSwapInterval(swapInterval);
+	}
 	if (glfwGetKey(w, GLFW_KEY_S) == GLFW_PRESS)
 		mainCamera->ProcessKeyboard(BACKWARD, deltaTime);
 	if (glfwGetKey(w, GLFW_KEY_A) == GLFW_PRESS)
