@@ -1,4 +1,6 @@
 #include "Chunk.h"
+#include "../third_parties/PerlinNoise/PerlinNoise.hpp"
+#include "World.h"
 
 const BlockId AIR   = 0;
 const BlockId STONE = 1;
@@ -30,7 +32,7 @@ Chunk::~Chunk() {
 }
 
 BlockId Chunk::getBlock(glm::vec3 worldPos) {
-	worldPos -= glm::vec3(chunkX, 0.0f, chunkZ);
+	worldPos -= glm::vec3(chunkX*size, 0.0f, chunkZ*size);
 	if (isBlockInChunk(worldPos)) {
 		throw "Chunk.position invalid argument : argument is too large";
 	}
@@ -57,15 +59,18 @@ glm::vec3 Chunk::getIndexWorldPos(size_t index) {
 
 
 void Chunk::generate() {
+	const siv::PerlinNoise::seed_type seed = 123456u;
+	const siv::PerlinNoise perlin{ seed };
 	generated = true;
-	static const unsigned int groundHeight = 100;
+	static const unsigned int groundHeightDefault = 150;
 	static const unsigned int rockDepth = 3;
 	for (size_t ix = 0; ix < size; ++ix) {
-		for (size_t iy = 0; iy < height; ++iy) {
-			for (size_t iz = 0; iz < size; ++iz) {
+		for (size_t iz = 0; iz < size; ++iz) {
+			const unsigned int groundHeight = groundHeightDefault + perlin.octave2D_01(((ix+chunkX*size) * 0.01), ((iz+chunkZ*size) * 0.01), 4)*10;
+			for (size_t iy = 0; iy < height; ++iy) {
                 BlockId type = AIR;
                 if (iy < groundHeight -1) {
-                    if (iy < groundHeight - rockDepth) {
+                    if (iy < groundHeight - rockDepth - 10 +perlin.octave2D_01(((ix + chunkX * size + 500000) * 0.01), ((iz + chunkZ * size + 500000) * 0.01), 4) * 10) {
                         type = STONE;
                     }
                     else {
@@ -122,6 +127,10 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 2); // editing the second bit
 			}
+		}else if (world.getBlockOpacity(
+			chunkPos * static_cast<float>(size) + static_cast<glm::vec3>(pos) + glm::vec3(1.0f, .0f, .0f)
+		) == Opacity::OPAQUE) {
+			occlusionMask &= ~(1 << 2);
 		}
 
 		if (pos.z < size - 1) { //EAST
@@ -130,6 +139,10 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 3); // editing the second bit
 			}
+		}else if (world.getBlockOpacity(
+			chunkPos * static_cast<float>(size) + static_cast<glm::vec3>(pos) + glm::vec3(.0f, .0f, 1.0f)
+		) == Opacity::OPAQUE) {
+			occlusionMask &= ~(1 << 3);
 		}
 
 		if (pos.x > 0) { //SOUTH
@@ -138,6 +151,10 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 4); // editing the second bit
 			}
+		}else if (world.getBlockOpacity(
+			chunkPos* static_cast<float>(size) + static_cast<glm::vec3>(pos) + glm::vec3(-1.0f, .0f, .0f)
+			) == Opacity::OPAQUE) {
+			occlusionMask &= ~(1 << 4);
 		}
 
 		if (pos.z > 0) { //WEST
@@ -146,6 +163,10 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 			if (bm.getBlockOpacity(botBlock) == Opacity::OPAQUE) {
 				occlusionMask &= ~(1 << 5); // editing the second bit
 			}
+		}else if (world.getBlockOpacity(
+			chunkPos * static_cast<float>(size) + static_cast<glm::vec3>(pos) + glm::vec3(.0f, .0f, -1.0f)
+		) == Opacity::OPAQUE) {
+			occlusionMask &= ~(1 << 5);
 		}
 
 		size_t newLength = copyBlockGeometry(*blockMatrix[i], verts, uvs, length, occlusionMask);
@@ -154,6 +175,7 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 		}
 		length = newLength;
 	}
+	std::cout << length << std::endl;
 	return length;
 }
 

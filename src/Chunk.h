@@ -5,6 +5,8 @@
 extern size_t defaultChunkHeight;
 extern size_t defaultChunkSize;
 
+class World;
+
 /*
 extern const float cubeUvs[];
 extern const glm::vec3 vertices[];
@@ -13,7 +15,7 @@ extern const glm::vec3 vertices[];
 class Chunk
 {
 public:
-	Chunk(glm::uvec2 position): size(defaultChunkSize), height(defaultChunkHeight), 
+	Chunk(glm::uvec2 position, World& world) : world(world), size(defaultChunkSize), height(defaultChunkHeight),
 	blockCount(size*size*height), chunkX(position.x), chunkZ(position.y),
 	chunkPos(position.x, 0.0f, position.y),
 	blockMatrix(new unsigned short int*[blockCount]) {
@@ -39,6 +41,7 @@ public:
 	size_t getGeometry(glm::vec3*& uvs, glm::vec3*& verts);
 
 private:
+	const World& world;
 	const size_t size;
 	const size_t height;
 	const size_t blockCount;

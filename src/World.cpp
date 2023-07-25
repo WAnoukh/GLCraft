@@ -3,7 +3,7 @@
 World::World() : chunks(new Chunk*[size*size]) {
 	for (size_t x = 0; x < size; ++x) {
 		for (size_t z = 0; z < size; ++z) {
-			chunks[posToIndex(x, z)] = new Chunk(glm::vec2(x, z));
+			chunks[posToIndex(x, z)] = new Chunk(glm::vec2(x, z),*this);
 		}
 	}
 }
@@ -44,15 +44,21 @@ size_t World::getGeometry(float*& geometry) {
 	return written;
 }
 
-bool World::isBlockLoaded(glm::vec3 pos) {
-	return pos.x < 0 || pos.y < 0 || pos.z < 0 || pos.x > size * defaultChunkSize || pos.y > defaultChunkHeight || pos.z > size * defaultChunkSize;
+unsigned short int World::getBlockOpacity(glm::vec3 pos) const {
+	if (!isBlockLoaded(pos)) return 0;
+	BlockId id = getBlock(pos);
+	return BlockManager::getInstance().getBlockOpacity(id);
+}
+
+bool World::isBlockLoaded(glm::vec3 pos) const{
+	return pos.x >= 0 && pos.y >= 0 && pos.z >= 0 && pos.x < size * defaultChunkSize && pos.y < defaultChunkHeight && pos.z < size * defaultChunkSize;
 }
 
 BlockId World::getBlock(glm::vec3 pos) const {
 	if (pos.x < 0 || pos.y < 0 || pos.z < 0 || pos.x > size * defaultChunkSize || pos.y > defaultChunkHeight || pos.z > size * defaultChunkSize) {
 		throw "World::getBlock error : block not loaded";
 	}
-	int chunkX = static_cast<int>(pos.x) / size, chunkZ = static_cast<int>(pos.z) / size;
+	int chunkX = static_cast<int>(pos.x) / defaultChunkSize, chunkZ = static_cast<int>(pos.z) / defaultChunkSize;
 	Chunk& blockChunk = *chunks[posToIndex(chunkX,chunkZ)];
 	return blockChunk.getBlock(pos);
 }
