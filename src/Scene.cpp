@@ -6,6 +6,7 @@
 
 
 void Scene::init() {
+	BlockManager::getInstance();
 	blockTexture = loadAtlas("src/Rendering/Textures/GLCraft_Atlas.png");
 	blockShader = new Shader("src/Rendering/Shaders/Block.vert", "src/Rendering/Shaders/Block.frag");
 	float* geometry = nullptr;

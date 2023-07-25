@@ -61,10 +61,11 @@ void Chunk::generate() {
 	for (size_t ix = 0; ix < size; ++ix) {
 		for (size_t iz = 0; iz < size; ++iz) {
 			const unsigned int groundHeight = groundHeightDefault + perlin.octave2D_01(((ix+chunkX*size) * 0.01), ((iz+chunkZ*size) * 0.01), 4)*10;
+			const unsigned int depthVar = -10 + perlin.octave2D_01(((ix + chunkX * size + 500000) * 0.01), ((iz + chunkZ * size + 500000) * 0.01), 4) * 10;
 			for (size_t iy = 0; iy < height; ++iy) {
                 BlockId type = AIR;
                 if (iy < groundHeight -1) {
-                    if (iy < groundHeight - rockDepth - 10 +perlin.octave2D_01(((ix + chunkX * size + 500000) * 0.01), ((iz + chunkZ * size + 500000) * 0.01), 4) * 10) {
+                    if (iy < groundHeight - rockDepth + depthVar) {
                         type = STONE;
                     }
                     else {
@@ -81,8 +82,6 @@ void Chunk::generate() {
 }
 
 size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
-	uvs = new glm::vec3[blockCount * 6 * 6];
-	verts = new glm::vec3[blockCount * 6 * 6];
 	size_t length = 0;
 	for (size_t i = 0; i < blockCount; ++i) {
 		BlockManager& bm = BlockManager::getInstance();
@@ -170,9 +169,6 @@ size_t Chunk::getGeometry(glm::vec3*& uvs, glm::vec3*& verts) {
 }
 
 size_t Chunk::getBlockIndexFromLocalPos(glm::uvec3 position) {
-	if (position.x >= size || position.z >= size || position.y >= height) {
-		throw "Chunk.getBlockIndex invalid argument : argument is too large";
-	}
 	return position.x + (position.y * size + position.z) * size;
 }
 
