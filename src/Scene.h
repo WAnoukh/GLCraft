@@ -12,7 +12,7 @@ class Scene
 public:
 	Camera& getMainCamera() { return mainCamera; };
 
-	Scene(Application& app):application(app), mainCamera(glm::vec3(0.0f, 0.0f, 3.0f)) {}
+	Scene(Application& app):application(app), mainCamera(glm::vec3(0.0f, 160.0f, 0.0f)) {}
 
 	void init();
 	

@@ -43,7 +43,7 @@ size_t World::getGeometry(float*& geometry) {
 	int chkPerThr = size * size / THR_NUM;
 	for (size_t i = 0; i < THR_NUM; ++i) {
 		if (i == THR_NUM - 1) {
-			threads.emplace(chunkGeometryThread, chunks + (i * chkPerThr), &chunkGeometries[i * chkPerThr], size * size % THR_NUM);
+			threads.emplace(chunkGeometryThread, chunks + (i * chkPerThr), &chunkGeometries[i * chkPerThr],  (size * size) - (i * chkPerThr));
 		}
 		else {
 			threads.emplace(chunkGeometryThread, chunks + (i * chkPerThr), &chunkGeometries[i * chkPerThr], chkPerThr);
@@ -74,24 +74,25 @@ size_t World::getGeometry(float*& geometry) {
 #ifndef MULT
 	ChunkGeometry* chunkGeometries = new ChunkGeometry[size * size];
 	size_t totalLength = 0;
+	const size_t blockCount = chunks[0]->getBlockCount();
+	glm::vec3* uvs = new glm::vec3[blockCount * 6 * 6];
+	glm::vec3* vertices = new glm::vec3[blockCount * 6 * 6];
 	for (size_t i = 0; i < size * size; ++i) {
-		glm::vec3* uvs;
-		glm::vec3* vertices;
 		size_t length = chunks[i]->getGeometry(uvs, vertices);
-		geometry = new float[length * 6];
+		float* tempGeometry = new float[length * 6];
 		for (size_t j = 0; j < length; ++j) {
-			geometry[j * 6] = vertices[j].x;
-			geometry[j * 6 + 1] = vertices[j].y;
-			geometry[j * 6 + 2] = vertices[j].z;
-			geometry[j * 6 + 3] = uvs[j].x;
-			geometry[j * 6 + 4] = uvs[j].y;
-			geometry[j * 6 + 5] = uvs[j].z;
+			tempGeometry[j * 6] = vertices[j].x;
+			tempGeometry[j * 6 + 1] = vertices[j].y;
+			tempGeometry[j * 6 + 2] = vertices[j].z;
+			tempGeometry[j * 6 + 3] = uvs[j].x;
+			tempGeometry[j * 6 + 4] = uvs[j].y;
+			tempGeometry[j * 6 + 5] = uvs[j].z;
 		}
-		delete[] uvs;
-		delete[] vertices;
-		chunkGeometries[i] = { geometry, length * 6 };
-		totalLength += length * 6;
+		chunkGeometries[i] = { tempGeometry, length * 6 };
+		totalLength += chunkGeometries[i].length;
 	}
+	delete[] uvs;
+	delete[] vertices;
 	geometry = new float[totalLength];
 	size_t written = 0;
 	for (size_t i = 0; i < size * size; ++i) {

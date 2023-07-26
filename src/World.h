@@ -23,7 +23,7 @@ public:
 	BlockId getBlock (glm::vec3 pos) const;
 	unsigned short int getBlockOpacity(glm::vec3 pos) const;
 private:
-	size_t size = 70;
+	size_t size = 50;
 	Chunk** chunks;
 	size_t posToIndex(int x, int z) const;
 	void indexToPos(size_t index, int& x, int& y) const;
