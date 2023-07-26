@@ -1,7 +1,7 @@
-#include "Application.h"
-#include "Chunk.h"
+#include "Application/Application.h"
+#include "Scene/Chunk.h"
 #include <iostream>
-#include "BlockData.h"
+#include "Scene/BlockData.h"
 
 int main()
 {

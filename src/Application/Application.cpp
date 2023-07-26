@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "Camera.h"
+#include "../Rendering/Camera.h"
 
 bool firstMouse = false;
 float lastX, lastY, deltaTime, lastFrame, timeDiff = 0.0f;

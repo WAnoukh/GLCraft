@@ -1,9 +1,9 @@
 #pragma once
 #include "World.h"
-#include "../third_parties/glad/glad.h"
-#include "Rendering/TextureLoader.h"
-#include "Rendering/shader_s.h"
-#include "Camera.h"
+#include "../../third_parties/glad/glad.h"
+#include "../Rendering/TextureLoader.h"
+#include "../Rendering/shader_s.h"
+#include "../Rendering/Camera.h"
 
 class Application;
 

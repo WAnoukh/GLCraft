@@ -2,10 +2,10 @@
 #include <thread>
 #include <queue>
 
-World::World() : chunks(new Chunk*[size*size]) {
+World::World() : chunks(new Chunk* [size * size]) {
 	for (size_t x = 0; x < size; ++x) {
 		for (size_t z = 0; z < size; ++z) {
-			chunks[posToIndex(x, z)] = new Chunk(glm::vec2(x, z),*this);
+			chunks[posToIndex(x, z)] = new Chunk(glm::vec2(x, z), *this);
 		}
 	}
 }

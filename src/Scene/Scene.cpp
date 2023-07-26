@@ -1,8 +1,8 @@
 #include "Scene.h"
-#include "../third_parties/glm/glm.hpp"
-#include "../third_parties/glm/gtc/matrix_transform.hpp"
-#include "../third_parties/glm/gtc/type_ptr.hpp"
-#include "Application.h"
+#include "../../third_parties/glm/glm.hpp"
+#include "../../third_parties/glm/gtc/matrix_transform.hpp"
+#include "../../third_parties/glm/gtc/type_ptr.hpp"
+#include "../Application/Application.h"
 
 
 void Scene::init() {

@@ -1,8 +1,8 @@
 #pragma once
-#include "../third_parties/glad/glad.h"
-#include "../third_parties/GLFW/include/glfw3.h"
+#include "../../third_parties/glad/glad.h"
+#include "../../third_parties/GLFW/include/glfw3.h"
 #include "Window.h"
-#include "Scene.h"
+#include "../Scene/Scene.h"
 #include <iostream>
 
 

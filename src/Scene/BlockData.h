@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 #include <iostream>
-#include "../third_parties/glm/glm.hpp"
+#include "../../third_parties/glm/glm.hpp"
 
 using BlockId = unsigned short int;
 

@@ -1,5 +1,5 @@
 #include "Chunk.h"
-#include "../third_parties/PerlinNoise/PerlinNoise.hpp"
+#include "../../third_parties/PerlinNoise/PerlinNoise.hpp"
 #include "World.h"
 
 const BlockId AIR   = 0;

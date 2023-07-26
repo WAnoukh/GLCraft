@@ -1,6 +1,6 @@
 #pragma once
-#include "../third_parties/glad/glad.h"
-#include "../third_parties/GLFW/include/glfw3.h"
+#include "../../third_parties/glad/glad.h"
+#include "../../third_parties/GLFW/include/glfw3.h"
 #include <iostream>
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
