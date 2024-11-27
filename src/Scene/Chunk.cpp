@@ -56,11 +56,13 @@ void Chunk::generate() {
 	const siv::PerlinNoise::seed_type seed = 123456u;
 	const siv::PerlinNoise perlin{ seed };
 	generated = true;
-	static const unsigned int groundHeightDefault = 150;
+	static const unsigned int groundHeightDefault = 20;
 	static const unsigned int rockDepth = 3;
 	for (size_t ix = 0; ix < size; ++ix) {
 		for (size_t iz = 0; iz < size; ++iz) {
-			const unsigned int groundHeight = groundHeightDefault + perlin.octave2D_01(((ix+chunkX*size) * 0.01), ((iz+chunkZ*size) * 0.01), 4)*10;
+			const unsigned int groundHeight = groundHeightDefault + perlin.octave2D_01(((ix+chunkX*size) * 0.01), ((iz+chunkZ*size) * 0.01), 4)*10
+			+ perlin.octave2D_01(((ix + chunkX * size + 500000) * 0.01), ((iz + chunkZ * size + 500000) * 0.01), 4) * 100
+			+ perlin.octave2D_01(((ix + chunkX * size + 10000000000) * 0.01), ((iz + chunkZ * size + 10000000000) * 0.01), 4) * 100;
 			const unsigned int depthVar = -10 + perlin.octave2D_01(((ix + chunkX * size + 500000) * 0.01), ((iz + chunkZ * size + 500000) * 0.01), 4) * 10;
 			for (size_t iy = 0; iy < height; ++iy) {
                 BlockId type = AIR;
