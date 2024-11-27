@@ -14,6 +14,7 @@ public:
 
 	Scene(Application& app):application(app), mainCamera(glm::vec3(0.0f, 160.0f, 0.0f)) {}
 
+	void LoadShaders();
 	void init();
 	
 	void render();

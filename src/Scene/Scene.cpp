@@ -5,10 +5,16 @@
 #include "../Application/Application.h"
 
 
+void Scene::LoadShaders()
+{
+	blockShader = new Shader("src/Rendering/Shaders/Block.vert", "src/Rendering/Shaders/Block.frag");
+	blockShader->use();
+	blockShader->setInt("material.diffuse", 0);
+}
+
 void Scene::init() {
 	BlockManager::getInstance();
 	blockTexture = loadAtlas("src/Rendering/Textures/GLCraft_Atlas.png");
-	blockShader = new Shader("src/Rendering/Shaders/Block.vert", "src/Rendering/Shaders/Block.frag");
 	float* geometry = nullptr;
 	VAO_Length = world.getGeometry(geometry);
 	std::cout << VAO_Length << " vao l" << std::endl;
@@ -24,8 +30,7 @@ void Scene::init() {
 	glEnableVertexAttribArray(1);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	blockShader->use();
-	blockShader->setInt("material.diffuse", 0);
+	LoadShaders();
 	delete[] geometry;
 }
 
@@ -47,6 +52,5 @@ void Scene::render() {
 	blockShader->setMat4("model", model);
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, VAO_Length);
-
 };
 

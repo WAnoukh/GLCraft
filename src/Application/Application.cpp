@@ -62,6 +62,8 @@ void Application::processInput()
 		mainCamera->ProcessKeyboard(DOWN, deltaTime);
 	if (glfwGetKey(w, GLFW_KEY_E) == GLFW_PRESS)
 		mainCamera->ProcessKeyboard(UP, deltaTime);
+	if(glfwGetKey(w, GLFW_KEY_R) == GLFW_PRESS)
+		scene.LoadShaders();
 }
 
 void Application::init() {
